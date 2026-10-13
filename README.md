@@ -6,23 +6,12 @@ PawPal+ is an object-oriented pet care manager written in Python. An owner regis
 
 ## 📐 System Architecture
 
-The design is four domain classes plus a small persistence handler. The full diagram lives in [`diagrams/uml_final.mmd`](diagrams/uml_final.mmd) and renders on GitHub:
+The design is four domain 
+classes plus a small persistence handler. The full diagram lives in ![Uploading mermaid-diagram-2026-10-13-152417.png…]()
+(diagrams/uml_final.mmd) and renders on GitHub:
+![PawPal+ UML class diagram](diagrams/uml_final.png)
 
-```mermaid
-classDiagram
-    direction LR
-    class Task
-    class Pet
-    class Owner
-    class Scheduler
-    class JsonPersistence
-    Owner "1" *-- "0..*" Pet : owns
-    Pet "1" *-- "0..*" Task : has
-    Scheduler "1" o-- "1" Owner : analyses
-    Owner ..> JsonPersistence : delegates save/load
-    Scheduler ..> JsonPersistence : delegates save/load
-    Scheduler ..> Task : spawns recurring
-```
+*Full class diagram. Source:(diagrams/uml_final.mmd)*
 
 *(Simplified here for readability — attributes and methods for every class are in `diagrams/uml_final.mmd`.)*
 
