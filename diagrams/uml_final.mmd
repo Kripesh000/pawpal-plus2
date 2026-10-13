@@ -1,0 +1,81 @@
+classDiagram
+    direction LR
+
+    class Task {
+        +String id
+        +String description
+        +String time
+        +String date
+        +String category
+        +String priority
+        +int duration_mins
+        +String status
+        +String frequency
+        +String pet_id
+        +start_minutes() int
+        +end_minutes() int
+        +end_time() String
+        +is_complete() bool
+        +mark_complete() Task
+        +to_dict() dict
+        +from_dict(dict data) Task
+    }
+
+    class Pet {
+        +String id
+        +String name
+        +String species
+        +String breed
+        +int age
+        +List~Task~ tasks
+        +add_task(Task task) Task
+        +remove_task(String task_id) bool
+        +get_tasks(String status) List~Task~
+        +to_dict() dict
+        +from_dict(dict data) Pet
+    }
+
+    class Owner {
+        +String id
+        +String name
+        +String email
+        +List~Pet~ pets
+        +add_pet(Pet pet) Pet
+        +remove_pet(String pet_id) bool
+        +get_pet(String ref) Pet
+        +get_all_tasks() List~Task~
+        +find_task(String task_id) tuple
+        +to_dict() dict
+        +from_dict(dict data) Owner
+        +save_to_json(String filepath) void
+        +load_from_json(String filepath) Owner
+    }
+
+    class Scheduler {
+        -Owner owner
+        +sort_tasks(List~Task~ tasks, String by) List~Task~
+        +filter_tasks(String status, String pet, String category, String priority, String date) List~Task~
+        +find_conflict_pairs(String date, bool include_completed) List~tuple~
+        +detect_conflicts(String date, bool include_completed) List~String~
+        +handle_recurring_task(Task task, Pet pet) Task
+        +complete_task(String task_id) Task
+        +get_free_windows(String start_time, String end_time, String date, String pet) List~tuple~
+        +find_next_available_slot(int duration_mins, String start_time, String end_time, String date, String pet) String
+        +pet_name_for(Task task) String
+        +save_to_json(String filepath) void
+        +load_from_json(String filepath) Scheduler
+    }
+
+    class JsonPersistence {
+        +int SCHEMA_VERSION$
+        +save(Owner owner, String filepath)$ void
+        +load(String filepath)$ Owner
+    }
+
+    Owner "1" *-- "0..*" Pet : owns
+    Pet "1" *-- "0..*" Task : has
+    Scheduler "1" o-- "1" Owner : analyses
+    Scheduler ..> Task : spawns recurring
+    Owner ..> JsonPersistence : delegates save/load
+    Scheduler ..> JsonPersistence : delegates save/load
+    JsonPersistence ..> Owner : serializes

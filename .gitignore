@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+.venv_new/
+.pytest_cache/
+.DS_Store
+data.json
+data_demo.json
+*.tmp
